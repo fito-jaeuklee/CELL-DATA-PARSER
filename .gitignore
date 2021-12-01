@@ -1,0 +1,4 @@
+.venv
+*.gp
+*.swp
+*.pyc
