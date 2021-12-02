@@ -7,6 +7,8 @@ COORDINATE_SCALING = 1e7
 MINUTE_SCALING = 1e5
 SECONDS_PER_MINUTE = 60
 
+SPEED_OF_GROUND_SCALING = 1e3
+
 class GpsMessage(NamedTuple):
     date: int
     time_utc: int
@@ -55,7 +57,7 @@ class GpsMessage(NamedTuple):
 
     @property
     def speed(self) -> float:
-        return self.speed_of_ground
+        return self.speed_of_ground / SPEED_OF_GROUND_SCALING
 
     @property
     def datetime(self) -> datetime:
