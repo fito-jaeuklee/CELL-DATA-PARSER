@@ -136,7 +136,7 @@ class TestGpsMessage:
     def test_speed(self):
         # Given: parsed and created GpsMessage from raw bytes of message
         gps_message = GpsMessage.create(gps_message_bytes)
-        expected_speed = 1707
+        expected_speed = 1.707
 
         # When: call datetime property
         actual_speed = gps_message.speed
@@ -151,7 +151,7 @@ class TestGpsMessage:
             datetime(2020, 4, 11, 0, 8, 26, 300000),
             37.40887433333333,
             126.69736833333333,
-            1707,
+            1.707,
         )
 
         # When: call export_row method
