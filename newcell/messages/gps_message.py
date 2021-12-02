@@ -3,6 +3,10 @@ from datetime import datetime
 from typing import NamedTuple
 
 
+COORDINATE_SCALING = 1e7
+MINUTE_SCALING = 1e5
+SECONDS_PER_MINUTE = 60
+
 class GpsMessage(NamedTuple):
     date: int
     time_utc: int
@@ -34,11 +38,10 @@ class GpsMessage(NamedTuple):
 
     @staticmethod
     def convert_nmea_to_decimal_degrees(nmea_value) -> float:
-        # TODO: let's name the constants!
         sign = 1 if nmea_value > 0 else -1
 
-        degrees, minutes = divmod(abs(nmea_value), 1e7)
-        converted = degrees + minutes / (1e5 * 60)
+        degrees, minutes = divmod(abs(nmea_value), COORDINATE_SCALING)
+        converted = degrees + minutes / (MINUTE_SCALING * SECONDS_PER_MINUTE)
 
         return sign * converted
 
