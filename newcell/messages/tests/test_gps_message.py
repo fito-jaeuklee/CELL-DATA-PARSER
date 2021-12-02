@@ -69,26 +69,26 @@ class TestGpsMessage:
     @pytest.mark.parametrize(
         "nmea_format, decimal_format",
         [
-            (372453246, 37.4088743),
-            (1264184210, 126.6973683),
-            (-372453246, -37.4088743),
-            (-1264184210, -126.6973683),
+            (372453246, 37.40887433333333),
+            (1264184210, 126.69736833333333),
+            (-372453246, -37.40887433333333),
+            (-1264184210, -126.69736833333333),
             (372328606, 37.388101),
-            (1265930276, 126.9883793),
+            (1265930276, 126.98837933333333),
             (-372328606, -37.388101),
-            (-1265930276, -126.9883793),
-            (372328614, 37.3881023),
+            (-1265930276, -126.98837933333333),
+            (372328614, 37.388102333333336),
             (1265930277, 126.9883795),
-            (-372328614, -37.3881023),
+            (-372328614, -37.388102333333336),
             (-1265930277, -126.9883795),
             (372328651, 37.3881085),
-            (1265930284, 126.9883807),
+            (1265930284, 126.98838066666667),
             (-372328651, -37.3881085),
-            (-1265930284, -126.9883807),
-            (372327819, 37.3879698),
-            (1265930087, 126.9883478),
-            (-372327819, -37.3879698),
-            (-1265930087,-126.9883478),
+            (-1265930284, -126.98838066666667),
+            (372327819, 37.38796983333334),
+            (1265930087, 126.98834783333334),
+            (-372327819, -37.38796983333334),
+            (-1265930087, -126.98834783333334),
         ]
     )
     def test_convert_nmea_to_decimal_degrees(self, nmea_format, decimal_format):
@@ -103,7 +103,7 @@ class TestGpsMessage:
     def test_latitude(self):
         # Given: parsed and created GpsMessage from raw bytes of message
         gps_message = GpsMessage.create(gps_message_bytes)
-        expected_latitude = 37.4088743
+        expected_latitude = 37.40887433333333
 
         # When: call latitude property
         actual_latitude = gps_message.latitude
@@ -114,7 +114,7 @@ class TestGpsMessage:
     def test_longitude(self):
         # Given: parsed and created GpsMessage from raw bytes of message
         gps_message = GpsMessage.create(gps_message_bytes)
-        expected_longitude = 126.6973683
+        expected_longitude = 126.69736833333333
 
         # When: call longitude property
         actual_longitude = gps_message.longitude
@@ -147,7 +147,12 @@ class TestGpsMessage:
     def test_export_row(self):
         # Given: parsed and created GpsMessage from raw bytes of message
         gps_message = GpsMessage.create(gps_message_bytes)
-        expected_exported_row = (datetime(2020, 4, 11, 0, 8, 26, 300000), 37.4088743, 126.6973683, 1707)
+        expected_exported_row = (
+            datetime(2020, 4, 11, 0, 8, 26, 300000),
+            37.40887433333333,
+            126.69736833333333,
+            1707,
+        )
 
         # When: call export_row method
         actual_exported_row = gps_message.export_row()
