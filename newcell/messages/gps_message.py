@@ -26,7 +26,7 @@ class GpsMessage(NamedTuple):
     avg_cn0: int
     fix_mode: int
 
-    gps_message_struct = struct.Struct("<IiiiIHHihIHHHBBBB")
+    gps_message_struct = struct.Struct("<IiiiIHHihiHHHBBBB")
 
     @classmethod
     def create(cls, payload: bytes):
