@@ -18,21 +18,21 @@ raw_gps_messages = [
 ]
 
 expected_exported_rows = [
-    (datetime(2020, 4, 11, 0, 8, 34, 800000), 37.408917, 126.6973547, 8),
-    (datetime(2020, 4, 11, 0, 8, 34, 900000), 37.408917, 126.6973547, 57),
-    (datetime(2020, 4, 11, 0, 8, 35), 37.4089172, 126.6973547, 55),
-    (datetime(2020, 4, 11, 0, 8, 35, 100000), 37.4089172, 126.6973548, 43),
-    (datetime(2020, 4, 11, 0, 8, 35, 200000), 37.4089172, 126.6973548, 50),
+    (datetime(2020, 4, 11, 0, 8, 34, 800000), 37.408917, 126.69735466666667, 8),
+    (datetime(2020, 4, 11, 0, 8, 34, 900000), 37.408917, 126.69735466666667, 57),
+    (datetime(2020, 4, 11, 0, 8, 35), 37.40891716666667, 126.69735466666667, 55),
+    (datetime(2020, 4, 11, 0, 8, 35, 100000), 37.40891716666667, 126.69735483333334, 43),
+    (datetime(2020, 4, 11, 0, 8, 35, 200000), 37.40891716666667, 126.69735483333334, 50),
 ]
 
 seoul_utc_time_difference = 9
 
 expected_time_adjusted_rows = [
-    (datetime(2020, 4, 11, seoul_utc_time_difference, 8, 34, 800000), 37.408917, 126.6973547, 8),
-    (datetime(2020, 4, 11, seoul_utc_time_difference, 8, 34, 900000), 37.408917, 126.6973547, 57),
-    (datetime(2020, 4, 11, seoul_utc_time_difference, 8, 35), 37.4089172, 126.6973547, 55),
-    (datetime(2020, 4, 11, seoul_utc_time_difference, 8, 35, 100000), 37.4089172, 126.6973548, 43),
-    (datetime(2020, 4, 11, seoul_utc_time_difference, 8, 35, 200000), 37.4089172, 126.6973548, 50),
+    (datetime(2020, 4, 11, seoul_utc_time_difference, 8, 34, 800000), 37.408917, 126.69735466666667, 8),
+    (datetime(2020, 4, 11, seoul_utc_time_difference, 8, 34, 900000), 37.408917, 126.69735466666667, 57),
+    (datetime(2020, 4, 11, seoul_utc_time_difference, 8, 35), 37.40891716666667, 126.69735466666667, 55),
+    (datetime(2020, 4, 11, seoul_utc_time_difference, 8, 35, 100000), 37.40891716666667, 126.69735483333334, 43),
+    (datetime(2020, 4, 11, seoul_utc_time_difference, 8, 35, 200000), 37.40891716666667, 126.69735483333334, 50),
 ]
 
 class TestGpsMessageManager:
@@ -69,15 +69,14 @@ class TestGpsMessageManager:
         # Given: exported dataframe
         dataframe = pandas.DataFrame(expected_exported_rows, columns=HEADER_OCH)
 
-        expected_lat = 37.40891712
-        expected_long = 126.69735474
+        expected_lat = 37.408917100000004
+        expected_long = 126.69735473333333
 
         # When: GpsMessageManager.mean_coordinate is called
         actual_lat, actual_long = GpsMessageManager.mean_coordinate(dataframe)
 
         # Then: mean value of coordinates match
         assert (actual_lat, actual_long) == (expected_lat, expected_long)
-
     def test_adjust_timezone(self):
         expected_dataframe = pandas.DataFrame(expected_time_adjusted_rows, columns=HEADER_OCH)
 
