@@ -38,7 +38,7 @@ class GpsMessage(NamedTuple):
         sign = 1 if nmea_value > 0 else -1
 
         degrees, minutes = divmod(abs(nmea_value), 1e7)
-        converted = round(degrees + minutes / (1e5 * 60), 7) 
+        converted = degrees + minutes / (1e5 * 60)
 
         return sign * converted
 
