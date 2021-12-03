@@ -3,13 +3,16 @@ from datetime import datetime
 from typing import NamedTuple
 
 
+BATTERY_SCALING = 1e2
+CELL_TEMPERATURE_SCALING = 1e2
+
 class BsMessage(NamedTuple):
     date: int
     time_utc: int
     operation_time: int
     hr: int
-    battery: int
-    cell_temperature: int
+    battery_scaled: int
+    cell_temperature_scaled: int
     reserve_1: int
     reserve_2: int
     reserve_3: int
@@ -24,19 +27,22 @@ class BsMessage(NamedTuple):
         return (self.datetime, self.operation_time, self.hr)
 
     @property
+    def battery(self) -> float:
+        return self.battery_scaled / BATTERY_SCALING
+
+    @property
+    def cell_temperature(self) -> float:
+        return self.cell_temperature_scaled / CELL_TEMPERATURE_SCALING
+
+    @property
     def datetime(self) -> datetime:
         year = self.date & 0x0000FFFF
         month = (self.date >> 16) & 0x00FF
         day = (self.date >> 24) & 0x00FF
 
-        utc_hour = self.time_utc & 0x000000FF
-        utc_minute = (self.time_utc >> 8) & 0x000000FF
-        utc_second = (self.time_utc >> 16) & 0x000000FF
-        utc_milisec = (self.time_utc >> 24) & 0x000000FF
+        time_value = self.time_utc / 1e2
 
         date_string = f"{day:02d}{month:02d}{year}"
-        time_string = f"{utc_hour:02d}{utc_minute:02d}{utc_second:02d}.{utc_milisec:02d}"
-
-        datetime_string = f"{date_string} {time_string}"
+        datetime_string = f"{date_string} {time_value:.02f}"
 
         return datetime.strptime(datetime_string, "%d%m%Y %H%M%S.%f")
