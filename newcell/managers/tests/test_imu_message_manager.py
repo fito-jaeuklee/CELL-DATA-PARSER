@@ -85,6 +85,32 @@ class TestImuMessageManager:
         # Then: the result sould be the same with expected one
         assert actual_dataframe.equals(expected_dataframe)
 
+    def test_adjust_date_when_date_changes_in_series_of_datetime(self):
+        exptected_rows = [
+            (datetime(2020, 4, 11, 23, 59, 59, 990000), -202, 39, -2264, -107, 4, -9, 333, 241, -355),
+            (datetime(2020, 4, 12, 00, 00, 00, 000000), -205, 42, -2271, -106, 5, -8, 333, 241, -355),
+        ]
+
+        expected_dataframe = pandas.DataFrame(exptected_rows, columns=HEADER_IMU)
+
+        # Given: sample exported rows in which the date changes & reference date
+        date_changing_input_rows = [
+            (datetime(1900, 1, 1, 23, 59, 59, 990000), -202, 39, -2264, -107, 4, -9, 333, 241, -355),
+            (datetime(1900, 1, 2, 00, 00, 00, 000000), -205, 42, -2271, -106, 5, -8, 333, 241, -355),
+        ]
+
+        reference_date = datetime(2020, 4, 11, 17, 42, 32, 810000)
+
+
+        # When: ImuMessageManager.adjust_date is called
+        actual_dataframe = ImuMessageManager.adjust_date(
+            pandas.DataFrame(date_changing_input_rows, columns=HEADER_IMU),
+            reference_date,
+        )
+
+        # Then: date is adjusted correctly
+        assert actual_dataframe.equals(expected_dataframe)
+
     def test_adjust_timezone(self):
         expected_dataframe = pandas.DataFrame(expected_datetime_adjusted_rows, columns=HEADER_IMU)
 
