@@ -1,6 +1,6 @@
 import pandas
 import pytz
-from datetime import datetime
+from datetime import datetime, timedelta
 from timezonefinder import TimezoneFinder
 
 from newcell.messages.imu_message import ImuMessage
@@ -45,8 +45,10 @@ class ImuMessageManager:
 
     @staticmethod
     def adjust_date(dataframe: pandas.DataFrame, date: datetime) -> pandas.DataFrame:
+        date_delta: timedelta = date.date() - dataframe.at[0, LABEL_DATETIME].date()
+
         dataframe[LABEL_DATETIME] = dataframe[LABEL_DATETIME].map(
-            lambda dt: dt.replace(year=date.year, month=date.month, day=date.day),
+            lambda dt: dt + date_delta,
         )
 
         return dataframe
