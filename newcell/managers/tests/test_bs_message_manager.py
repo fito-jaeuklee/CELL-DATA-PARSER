@@ -1,6 +1,6 @@
 import pandas
 import pytz
-from datetime import datetime
+from datetime import datetime, timedelta
 from timezonefinder import TimezoneFinder
 
 from newcell.managers.bs_message_manager import (
@@ -10,29 +10,26 @@ from newcell.managers.bs_message_manager import (
 
 
 raw_bs_messages = [
-    b'\xe4\x07\x04\x0b\x00\x08\x1f\n\xa9\x08\x00\x00\x00\x00\x90\x01\x00\x00\x00\x00\x00\x00\x00\x00',
-    b'\xe4\x07\x04\x0b\x00\x08 \n\xaa\x08\x00\x00\x00\x00\x90\x01\x00\x00\x00\x00\x00\x00\x00\x00',
-    b'\xe4\x07\x04\x0b\x00\x08!\n\xab\x08\x00\x00\x00\x00\x90\x01\x00\x00\x00\x00\x00\x00\x00\x00',
-    b'\xe4\x07\x04\x0b\x00\x08"\n\xac\x08\x00\x00\x00\x00\x90\x01\x00\x00\x00\x00\x00\x00\x00\x00',
-    b'\xe4\x07\x04\x0b\x00\x08#\n\xad\x08\x00\x00\x00\x00\x90\x01\x00\x00\x00\x00\x00\x00\x00\x00',
+    b'\xe4\x07\x02\x13t\xdb\t\x01\x01\x00\x00\x00\x00\x00[\x01\xfe\xfe\x00\x00\x00\x00\x00\x00',
+    b'\xe4\x07\x02\x13\xce\xdb\t\x01\x02\x00\x00\x00\x00\x00[\x01\xfe\xfe\x00\x00\x00\x00\x00\x00',
+    b'\xe4\x07\x02\x132\xdc\t\x01\x03\x00\x00\x00\x00\x00[\x01\xfe\xfe\x00\x00\x00\x00\x00\x00',
+    b'\xe4\x07\x02\x13\x96\xdc\t\x01\x04\x00\x00\x00\x00\x00[\x01\xfe\xfe\x00\x00\x00\x00\x00\x00',
+    b'\xe4\x07\x02\x13\xfa\xdc\t\x01\x05\x00\x00\x00\x00\x00Z\x01\xfe\xfe\x00\x00\x00\x00\x00\x00',
 ]
 
 expected_exported_rows = [
-    (datetime(2020, 4, 11, 0, 8, 31, 100000), 2217, 0),
-    (datetime(2020, 4, 11, 0, 8, 32, 100000), 2218, 0),
-    (datetime(2020, 4, 11, 0, 8, 33, 100000), 2219, 0),
-    (datetime(2020, 4, 11, 0, 8, 34, 100000), 2220, 0),
-    (datetime(2020, 4, 11, 0, 8, 35, 100000), 2221, 0),
+    (datetime(2020, 2, 19, 17, 42, 32, 200000), 1, 0),
+    (datetime(2020, 2, 19, 17, 42, 33, 100000), 2, 0),
+    (datetime(2020, 2, 19, 17, 42, 34, 100000), 3, 0),
+    (datetime(2020, 2, 19, 17, 42, 35, 100000), 4, 0),
+    (datetime(2020, 2, 19, 17, 42, 36, 100000), 5, 0),
 ]
 
 seoul_utc_time_difference = 9
 
 expected_time_adjusted_rows = [
-    (datetime(2020, 4, 11, seoul_utc_time_difference, 8, 31, 100000), 2217, 0),
-    (datetime(2020, 4, 11, seoul_utc_time_difference, 8, 32, 100000), 2218, 0),
-    (datetime(2020, 4, 11, seoul_utc_time_difference, 8, 33, 100000), 2219, 0),
-    (datetime(2020, 4, 11, seoul_utc_time_difference, 8, 34, 100000), 2220, 0),
-    (datetime(2020, 4, 11, seoul_utc_time_difference, 8, 35, 100000), 2221, 0),
+    (row[0] + timedelta(hours=seoul_utc_time_difference),) + row[1:]
+    for row in expected_exported_rows
 ]
 
 class TestBsMessageManager:
