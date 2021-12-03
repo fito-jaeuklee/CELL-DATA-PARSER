@@ -1,6 +1,6 @@
 import pandas
 import pytz
-from datetime import datetime
+from datetime import datetime, timedelta
 from timezonefinder import TimezoneFinder
 
 from newcell.managers.imu_message_manager import (
@@ -10,40 +10,38 @@ from newcell.managers.imu_message_manager import (
 
 
 raw_imu_messages = [
-    b'\x00\x08#!\xff\xca\x00\x14\xf7\x82\xff\xec\x00\x01\x00\x00\xd3\xff\xdb\x00a\xfe',
-    b'\x00\x08#"\xff\xce\x00\x13\xf7{\xff\xf1\xff\xff\x00\x01\xd3\xff\xdb\x00a\xfe',
-    b'\x00\x08##\xff\xcc\x00\x14\xf7\x7f\xff\xec\x00\x00\x00\x01\xd3\xff\xdb\x00a\xfe',
-    b'\x00\x08#$\xff\xcd\x00\x15\xf7\x84\xff\xf1\x00\x02\x00\x01\xd3\xff\xdb\x00a\xfe',
-    b'\x00\x08#%\xff\xcc\x00\x13\xf7\x81\xff\xed\x00\x00\x00\x00\xd3\xff\xdb\x00a\xfe',
+    b"\xb2\xdb\t\x01\xff6\x00'\xf7(\xff\x95\x00\x04\xff\xf7M\x01\xf1\x00\x9d\xfe",
+    b'\xb3\xdb\t\x01\xff3\x00*\xf7!\xff\x96\x00\x05\xff\xf8M\x01\xf1\x00\x9d\xfe',
+    b'\xb4\xdb\t\x01\xff3\x00*\xf7 \xff\x96\x00\x04\xff\xf8M\x01\xf1\x00\x9d\xfe',
+    b'\xb5\xdb\t\x01\xff3\x00(\xf7\x19\xff\x96\x00\x03\xff\xf9M\x01\xf1\x00\x9d\xfe',
+    b'\xb6\xdb\t\x01\xff6\x00*\xf7\x18\xff\x96\x00\x04\xff\xf8M\x01\xf1\x00\x9d\xfe',
 ]
 
 expected_exported_rows = [
-    (datetime(1900, 1, 1, 0, 8, 35, 330000), -54, 20, -2174, -20, 1, 0, -45, 219, -415),
-    (datetime(1900, 1, 1, 0, 8, 35, 340000), -50, 19, -2181, -15, -1, 1, -45, 219, -415),
-    (datetime(1900, 1, 1, 0, 8, 35, 350000), -52, 20, -2177, -20, 0, 1, -45, 219, -415),
-    (datetime(1900, 1, 1, 0, 8, 35, 360000), -51, 21, -2172, -15, 2, 1, -45, 219, -415),
-    (datetime(1900, 1, 1, 0, 8, 35, 370000), -52, 19, -2175, -19, 0, 0, -45, 219, -415),
+    (datetime(1900, 1, 1, 17, 42, 32, 820000), -202, 39, -2264, -107, 4, -9, 333, 241, -355),
+    (datetime(1900, 1, 1, 17, 42, 32, 830000), -205, 42, -2271, -106, 5, -8, 333, 241, -355),
+    (datetime(1900, 1, 1, 17, 42, 32, 840000), -205, 42, -2272, -106, 4, -8, 333, 241, -355),
+    (datetime(1900, 1, 1, 17, 42, 32, 850000), -205, 40, -2279, -106, 3, -7, 333, 241, -355),
+    (datetime(1900, 1, 1, 17, 42, 32, 860000), -202, 42, -2280, -106, 4, -8, 333, 241, -355),
 ]
 
-date_to_adjust = datetime(2020, 4, 11, 0, 8, 34, 800000)
+date_to_adjust = datetime(2020, 4, 11, 17, 42, 32, 810000)
 
 expected_date_adjusted_rows = [
-    (datetime(2020, 4, 11, 0, 8, 35, 330000), -54, 20, -2174, -20, 1, 0, -45, 219, -415),
-    (datetime(2020, 4, 11, 0, 8, 35, 340000), -50, 19, -2181, -15, -1, 1, -45, 219, -415),
-    (datetime(2020, 4, 11, 0, 8, 35, 350000), -52, 20, -2177, -20, 0, 1, -45, 219, -415),
-    (datetime(2020, 4, 11, 0, 8, 35, 360000), -51, 21, -2172, -15, 2, 1, -45, 219, -415),
-    (datetime(2020, 4, 11, 0, 8, 35, 370000), -52, 19, -2175, -19, 0, 0, -45, 219, -415),
+    (datetime(2020, 4, 11, 17, 42, 32, 820000), -202, 39, -2264, -107, 4, -9, 333, 241, -355),
+    (datetime(2020, 4, 11, 17, 42, 32, 830000), -205, 42, -2271, -106, 5, -8, 333, 241, -355),
+    (datetime(2020, 4, 11, 17, 42, 32, 840000), -205, 42, -2272, -106, 4, -8, 333, 241, -355),
+    (datetime(2020, 4, 11, 17, 42, 32, 850000), -205, 40, -2279, -106, 3, -7, 333, 241, -355),
+    (datetime(2020, 4, 11, 17, 42, 32, 860000), -202, 42, -2280, -106, 4, -8, 333, 241, -355),
 ]
 
 seoul_utc_time_difference = 9
 
 expected_datetime_adjusted_rows = [
-    (datetime(2020, 4, 11, seoul_utc_time_difference, 8, 35, 330000), -54, 20, -2174, -20, 1, 0, -45, 219, -415),
-    (datetime(2020, 4, 11, seoul_utc_time_difference, 8, 35, 340000), -50, 19, -2181, -15, -1, 1, -45, 219, -415),
-    (datetime(2020, 4, 11, seoul_utc_time_difference, 8, 35, 350000), -52, 20, -2177, -20, 0, 1, -45, 219, -415),
-    (datetime(2020, 4, 11, seoul_utc_time_difference, 8, 35, 360000), -51, 21, -2172, -15, 2, 1, -45, 219, -415),
-    (datetime(2020, 4, 11, seoul_utc_time_difference, 8, 35, 370000), -52, 19, -2175, -19, 0, 0, -45, 219, -415),
+    (row[0] + timedelta(hours=seoul_utc_time_difference),) + row[1:]
+    for row in expected_date_adjusted_rows
 ]
+
 
 class TestImuMessageManager:
     def test_add_message(self):
