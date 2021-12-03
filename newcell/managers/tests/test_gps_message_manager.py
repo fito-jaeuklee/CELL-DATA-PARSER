@@ -1,6 +1,6 @@
 import pandas
 import pytz
-from datetime import datetime
+from datetime import datetime, timedelta
 from timezonefinder import TimezoneFinder
 
 from newcell.managers.gps_message_manager import (
@@ -10,29 +10,26 @@ from newcell.managers.gps_message_manager import (
 
 
 raw_gps_messages = [
-    b'\xe4\x07\x04\x0b\x00\x08"P~03\x16@\xebYKOj\x00\x00\x19\x00\'\x00\x08\x00\x00\x00\x00\x00\xfe\xff\xff\xff\xc1\x008\x01\x04\x01\x05\x00\x00A',
-    b'\xe4\x07\x04\x0b\x00\x08"Z~03\x16@\xebYK@j\x00\x00\x18\x00\'\x009\x00\x00\x00\x00\x00\x03\x00\x00\x00\xc1\x008\x01\x04\x01\x05\x00\x00A',
-    b'\xe4\x07\x04\x0b\x00\x08#\x00\x7f03\x16@\xebYKAj\x00\x00\x18\x00&\x007\x00\x00\x00\x00\x00\x00\x00\x00\x00\xc1\x008\x01\x04\x01\x05\x00\x00A',
-    b'\xe4\x07\x04\x0b\x00\x08#\n\x7f03\x16A\xebYK6j\x00\x00\x18\x00&\x00+\x00\x00\x00\x00\x00\x02\x00\x00\x00\xc1\x008\x01\x04\x01\x05\x00\x00A',
-    b'\xe4\x07\x04\x0b\x00\x08#\x14\x7f03\x16A\xebYK+j\x00\x00\x18\x00&\x002\x00\x00\x00\x00\x00\xfe\xff\xff\xff\xc1\x008\x01\x04\x01\x05\x00\x00A',
+    b"\xe4\x07\x02\x13j\xdb\t\x01P\xcf\x02\x13W\x00\x00\x00(\xb3\xa7\xdb'\x01\x00\x00\xde\x13\x02\x00|\x15\xec\x13\xd6\x06\x00\x00Pr\x00\x00\x00\x00\xd1\x00\xda\x00\xaf\x00\x06\x06)A",
+    b"\xe4\x07\x02\x13t\xdb\t\x010\xfe\x02\x13W\x00\x00\x008]\xa7\xdb'\x01\x00\x00H\x0e\x02\x00\xcc\x10\x04\x10M\x07\x00\x00\x10l\x00\x00\x00\x00\xd1\x00\xda\x00\xaf\x00\x06\x06)A",
+    b"\xe4\x07\x02\x13~\xdb\t\x01 T\x03\x13W\x00\x00\x00X\xb7\xa5\xdb'\x01\x00\x00Y\x0c\x02\x00\xac\rH\r\x08\x03\x00\x00\x10l\x00\x00\x00\x00\xd1\x00\xda\x00\xaf\x00\x06\x06)A",
+    b"\xe4\x07\x02\x13\x88\xdb\t\x01@\xa2\x03\x13W\x00\x00\x00\x80\xe0\xa4\xdb'\x01\x00\x00m\x03\x02\x00T\x0bT\x0b\x05\x03\x00\x00Cq\x00\x00\x00\x00\xd1\x00\xda\x00\xaf\x00\x06\x06*A",
+    b"\xe4\x07\x02\x13\x92\xdb\t\x010\xf8\x03\x13W\x00\x00\x00\xf0\xf1\xa5\xdb'\x01\x00\x00\x9a\xfb\x01\x00\xc4\t`\t\x1e\x01\x00\x00Cq\x00\x00\x00\x00\xd1\x00\xda\x00\xaf\x00\x06\x06*A",
 ]
 
 expected_exported_rows = [
-    (datetime(2020, 4, 11, 0, 8, 34, 800000), 37.408917, 126.69735466666667, 0.008),
-    (datetime(2020, 4, 11, 0, 8, 34, 900000), 37.408917, 126.69735466666667, 0.057),
-    (datetime(2020, 4, 11, 0, 8, 35), 37.40891716666667, 126.69735466666667, 0.055),
-    (datetime(2020, 4, 11, 0, 8, 35, 100000), 37.40891716666667, 126.69735483333334, 0.043),
-    (datetime(2020, 4, 11, 0, 8, 35, 200000), 37.40891716666667, 126.69735483333334, 0.050),
+    (datetime(2020, 2, 19, 17, 42, 32, 100000), 37.663517666666664, 127.11675883333334, 1.75),
+    (datetime(2020, 2, 19, 17, 42, 32, 200000), 37.663519666666666, 127.11675516666666, 1.869),
+    (datetime(2020, 2, 19, 17, 42, 32, 300000), 37.66352333333333, 127.11673716666667, 0.776),
+    (datetime(2020, 2, 19, 17, 42, 32, 400000), 37.66352666666667, 127.116728, 0.773),
+    (datetime(2020, 2, 19, 17, 42, 32, 500000), 37.663530333333334, 127.11673966666666, 0.286),
 ]
 
 seoul_utc_time_difference = 9
 
 expected_time_adjusted_rows = [
-    (datetime(2020, 4, 11, seoul_utc_time_difference, 8, 34, 800000), 37.408917, 126.69735466666667, 0.008),
-    (datetime(2020, 4, 11, seoul_utc_time_difference, 8, 34, 900000), 37.408917, 126.69735466666667, 0.057),
-    (datetime(2020, 4, 11, seoul_utc_time_difference, 8, 35), 37.40891716666667, 126.69735466666667, 0.055),
-    (datetime(2020, 4, 11, seoul_utc_time_difference, 8, 35, 100000), 37.40891716666667, 126.69735483333334, 0.043),
-    (datetime(2020, 4, 11, seoul_utc_time_difference, 8, 35, 200000), 37.40891716666667, 126.69735483333334, 0.050),
+    (row[0] + timedelta(hours=seoul_utc_time_difference),) + row[1:]
+    for row in expected_exported_rows
 ]
 
 class TestGpsMessageManager:
@@ -69,14 +66,15 @@ class TestGpsMessageManager:
         # Given: exported dataframe
         dataframe = pandas.DataFrame(expected_exported_rows, columns=HEADER_OCH)
 
-        expected_lat = 37.408917100000004
-        expected_long = 126.69735473333333
+        expected_lat = 37.66352353333333
+        expected_long = 127.11674376666664
 
         # When: GpsMessageManager.mean_coordinate is called
         actual_lat, actual_long = GpsMessageManager.mean_coordinate(dataframe)
 
         # Then: mean value of coordinates match
         assert (actual_lat, actual_long) == (expected_lat, expected_long)
+
     def test_adjust_timezone(self):
         expected_dataframe = pandas.DataFrame(expected_time_adjusted_rows, columns=HEADER_OCH)
 
@@ -87,6 +85,9 @@ class TestGpsMessageManager:
 
         # When: GpsMessageManager.adjust_timezone is called
         actual_dataframe = GpsMessageManager.adjust_timezone(dataframe, tz)
+
+        print(actual_dataframe)
+        print(expected_dataframe)
 
         # Then: the result sould be the same with expected one
         assert actual_dataframe.equals(expected_dataframe)
