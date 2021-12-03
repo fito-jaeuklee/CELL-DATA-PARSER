@@ -3,6 +3,7 @@ import pytz
 from datetime import datetime, timedelta
 from timezonefinder import TimezoneFinder
 
+from newcell.managers.message_manager import MessageManager
 from newcell.managers.bs_message_manager import (
     BsMessageManager,
     HEADER_BS,
@@ -71,7 +72,7 @@ class TestBsMessageManager:
         dataframe = pandas.DataFrame(expected_exported_rows, columns=HEADER_BS)
 
         # When: BsMessageManager.adjust_timezone is called
-        actual_dataframe = BsMessageManager.adjust_timezone(dataframe, tz)
+        actual_dataframe = MessageManager.adjust_timezone(dataframe, tz)
 
         # Then: the result sould be the same with expected one
         assert actual_dataframe.equals(expected_dataframe)
@@ -83,7 +84,7 @@ class TestBsMessageManager:
         dataframe = pandas.DataFrame(expected_exported_rows, columns=HEADER_BS)
 
         # When: BsMessageManager.adjust_timezone_by_coordinate is called
-        actual_dataframe = BsMessageManager.adjust_timezone_by_coordinate(dataframe, lat=37.4, long=126.7)
+        actual_dataframe = MessageManager.adjust_timezone_by_coordinate(dataframe, lat=37.4, long=126.7)
 
         # Then: the result sould be the same with expected one
         assert actual_dataframe.equals(expected_dataframe)

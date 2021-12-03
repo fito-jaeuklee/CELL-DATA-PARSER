@@ -7,6 +7,7 @@ from newcell.managers.imu_message_manager import (
     ImuMessageManager,
     HEADER_IMU,
 )
+from newcell.managers.message_manager import MessageManager
 
 
 raw_imu_messages = [
@@ -80,7 +81,7 @@ class TestImuMessageManager:
         dataframe = pandas.DataFrame(expected_exported_rows, columns=HEADER_IMU)
 
         # When: ImuMessageManager.adjust_timezone is called
-        actual_dataframe = ImuMessageManager.adjust_date(dataframe, date_to_adjust)
+        actual_dataframe = MessageManager.adjust_date(dataframe, date_to_adjust)
 
         # Then: the result sould be the same with expected one
         assert actual_dataframe.equals(expected_dataframe)
@@ -103,7 +104,7 @@ class TestImuMessageManager:
 
 
         # When: ImuMessageManager.adjust_date is called
-        actual_dataframe = ImuMessageManager.adjust_date(
+        actual_dataframe = MessageManager.adjust_date(
             pandas.DataFrame(date_changing_input_rows, columns=HEADER_IMU),
             reference_date,
         )
@@ -120,7 +121,7 @@ class TestImuMessageManager:
         dataframe = pandas.DataFrame(expected_date_adjusted_rows, columns=HEADER_IMU)
 
         # When: ImuMessageManager.adjust_timezone is called
-        actual_dataframe = ImuMessageManager.adjust_timezone(dataframe, tz)
+        actual_dataframe = MessageManager.adjust_timezone(dataframe, tz)
 
         # Then: the result sould be the same with expected one
         assert actual_dataframe.equals(expected_dataframe)
@@ -132,7 +133,7 @@ class TestImuMessageManager:
         dataframe = pandas.DataFrame(expected_date_adjusted_rows, columns=HEADER_IMU)
 
         # When: ImuMessageManager.adjust_timezone_by_coordinate is called
-        actual_dataframe = ImuMessageManager.adjust_timezone_by_coordinate(dataframe, lat=37.4, long=126.7)
+        actual_dataframe = MessageManager.adjust_timezone_by_coordinate(dataframe, lat=37.4, long=126.7)
 
         # Then: the result sould be the same with expected one
         assert actual_dataframe.equals(expected_dataframe)

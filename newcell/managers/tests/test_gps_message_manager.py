@@ -3,6 +3,7 @@ import pytz
 from datetime import datetime, timedelta
 from timezonefinder import TimezoneFinder
 
+from newcell.managers.message_manager import MessageManager
 from newcell.managers.gps_message_manager import (
     GpsMessageManager,
     HEADER_OCH,
@@ -84,10 +85,7 @@ class TestGpsMessageManager:
         dataframe = pandas.DataFrame(expected_exported_rows, columns=HEADER_OCH)
 
         # When: GpsMessageManager.adjust_timezone is called
-        actual_dataframe = GpsMessageManager.adjust_timezone(dataframe, tz)
-
-        print(actual_dataframe)
-        print(expected_dataframe)
+        actual_dataframe = MessageManager.adjust_timezone(dataframe, tz)
 
         # Then: the result sould be the same with expected one
         assert actual_dataframe.equals(expected_dataframe)
@@ -99,7 +97,7 @@ class TestGpsMessageManager:
         dataframe = pandas.DataFrame(expected_exported_rows, columns=HEADER_OCH)
 
         # When: GpsMessageManager.adjust_timezone_by_coordinate is called
-        actual_dataframe = GpsMessageManager.adjust_timezone_by_coordinate(dataframe, lat=37.4, long=126.7)
+        actual_dataframe = MessageManager.adjust_timezone_by_coordinate(dataframe, lat=37.4, long=126.7)
 
         # Then: the result sould be the same with expected one
         assert actual_dataframe.equals(expected_dataframe)
