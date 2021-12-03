@@ -15,16 +15,19 @@ class ImuMessage(NamedTuple):
     mag_y: int
     mag_z: int
 
-    imu_message_struct_first = struct.Struct(">ihhhhhh")
-    imu_message_struct_second = struct.Struct("<hhh")
-    part_boundary_index = -6
+    time_utc_struct = struct.Struct("<i")
+    accel_gyro_struct = struct.Struct(">hhhhhh")
+    magnet_struct = struct.Struct("<hhh")
+
+    utc_end_index = time_utc_struct.size
+    magnet_start_index = -magnet_struct.size
 
     @classmethod
     def create(cls, payload: bytes):
-        # length validation??
         return cls._make(
-            cls.imu_message_struct_first.unpack(payload[:cls.part_boundary_index]) +
-            cls.imu_message_struct_second.unpack(payload[cls.part_boundary_index:]),
+            cls.time_utc_struct.unpack(payload[:cls.utc_end_index]) +
+            cls.accel_gyro_struct.unpack(payload[cls.utc_end_index:cls.magnet_start_index]) +
+            cls.magnet_struct.unpack(payload[cls.magnet_start_index:])
         )
 
     def export_row(self):
@@ -44,13 +47,8 @@ class ImuMessage(NamedTuple):
 
     @property
     def datetime(self) -> datetime:
-        utc_milisec = self.time_utc & 0x000000FF
-        utc_second = (self.time_utc >> 8) & 0x000000FF
-        utc_minute = (self.time_utc >> 16) & 0x000000FF
-        utc_hour = (self.time_utc >> 24) & 0x000000FF
+        utc_time_value = self.time_utc / 1e2
 
-        time_string = f"{utc_hour:02d}{utc_minute:02d}{utc_second:02d}.{utc_milisec:02d}"
-
-        datetime_string = f"{time_string}"
+        datetime_string = f"{utc_time_value:.02f}"
 
         return datetime.strptime(datetime_string, "%H%M%S.%f")
