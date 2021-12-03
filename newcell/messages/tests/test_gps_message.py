@@ -11,18 +11,18 @@ expected_gps_message = GpsMessage(
     time_utc=17423210,
     gps_nmea_latitude=373981106000,
     gps_nmea_longitude=1270700553000,
-    height=136158,
-    h_acc=5500,
-    v_acc=5100,
-    speed_of_ground=1750,
-    corse_angle=29264,
-    vertical_velocity=0,
-    hdop=209,
-    vdop=218,
-    tdop=175,
+    height_scaled=136158,
+    h_acc_scaled=5500,
+    v_acc_scaled=5100,
+    sog_scaled=1750,
+    corse_angle_scaled=29264,
+    vertical_velocity_scaled=0,
+    hdop_scaled=209,
+    vdop_scaled=218,
+    tdop_scaled=175,
     navigation_stellites=6,
     tracked_satellites=6,
-    avg_cn0=41,
+    avg_cn0_scaled=41,
     fix_mode=65,
 )
 
@@ -159,3 +159,24 @@ class TestGpsMessage:
 
         # Then: exported row matches
         assert actual_exported_row == expected_exported_row
+
+    @pytest.mark.parametrize(
+        "message_property, expected_value",
+        [
+            ("height", 136.158),
+            ("h_acc", 55.0),
+            ("v_acc", 51.0),
+            ("corse_angle", 292.64),
+            ("vertical_velocity", 0.0),
+            ("hdop", 2.09),
+            ("vdop", 2.18),
+            ("tdop", 1.75),
+            ("avg_cn0", 0.41),
+        ]
+    )
+    def test_scaled_value(self, message_property, expected_value):
+       # Given: parsed and created GpsMessage from raw bytes of message
+       gps_message = GpsMessage.create(gps_message_bytes)
+
+       # Then: each property's actual value should eqauls to expected value
+       assert getattr(gps_message, message_property) == expected_value
