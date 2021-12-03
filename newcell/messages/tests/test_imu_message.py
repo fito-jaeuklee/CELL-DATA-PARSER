@@ -3,19 +3,19 @@ from datetime import datetime
 from newcell.messages.imu_message import ImuMessage
 
 
-imu_message_bytes = b'\x00\x08\x1a(\xff\xd1\x00\x15\xf7l\xff\xf0\x00\x04\x00\x01\xc3\xff\xd1\x00I\xfe'
+imu_message_bytes = b'j\xdb\t\x01\xff1\x00(\xf7\x1c\xff\x95\x00\x03\xff\xf7P\x01\xfc\x00\xa4\xfe'
 
 expected_imu_message = ImuMessage(
-    time_utc=530984,
-    accel_x=-47,
-    accel_y=21,
-    accel_z=-2196,
-    gyro_x=-16,
-    gyro_y=4,
-    gyro_z=1,
-    mag_x=-61,
-    mag_y=209,
-    mag_z=-439,
+    time_utc=17423210,
+    accel_x=-207,
+    accel_y=40,
+    accel_z=-2276,
+    gyro_x=-107,
+    gyro_y=3,
+    gyro_z=-9,
+    mag_x=336,
+    mag_y=252,
+    mag_z=-348,
 )
 
 class TestImuMessage:
@@ -29,7 +29,7 @@ class TestImuMessage:
     def test_accel(self):
         # Given: parsed and created ImuMessage from raw bytes of message
         imu_message = ImuMessage.create(imu_message_bytes)
-        expected_accel = (-47, 21, -2196)
+        expected_accel = (-207, 40, -2276)
 
         # When: call accel property
         actual_accel = imu_message.accel
@@ -40,7 +40,7 @@ class TestImuMessage:
     def test_gyro(self):
         # Given: parsed and created ImuMessage from raw bytes of message
         imu_message = ImuMessage.create(imu_message_bytes)
-        expected_gyro = (-16, 4, 1)
+        expected_gyro = (-107, 3, -9)
 
         # When: call gyro property
         actual_gyro = imu_message.gyro
@@ -51,7 +51,7 @@ class TestImuMessage:
     def test_magnet(self):
         # Given: parsed and created ImuMessage from raw bytes of message
         imu_message = ImuMessage.create(imu_message_bytes)
-        expected_magnet = (-61, 209, -439) 
+        expected_magnet = (336, 252, -348)
 
         # When: call magnet property
         actual_magnet = imu_message.magnet
@@ -62,7 +62,7 @@ class TestImuMessage:
     def test_datetime(self):
         # Given: parsed and created ImuMessage from raw bytes of message
         imu_message = ImuMessage.create(imu_message_bytes)
-        expected_datetime = datetime(1900, 1, 1, 0, 8, 26, 400000)
+        expected_datetime = datetime(1900, 1, 1, 17, 42, 32, 100000)
 
         # When: call datetime property
         actual_datetime = imu_message.datetime
@@ -73,7 +73,9 @@ class TestImuMessage:
     def test_export_row(self):
         # Given: parsed and created ImuMessage from raw bytes of message
         imu_message = ImuMessage.create(imu_message_bytes)
-        expected_exported_row = (datetime(1900, 1, 1, 0, 8, 26, 400000), -47, 21, -2196, -16, 4, 1, -61, 209, -439)
+        expected_exported_row = (
+            datetime(1900, 1, 1, 17, 42, 32, 100000), -207, 40, -2276, -107, 3, -9, 336, 252, -348,
+        )
 
         # When: call export_row method
         actual_exported_row = imu_message.export_row()
