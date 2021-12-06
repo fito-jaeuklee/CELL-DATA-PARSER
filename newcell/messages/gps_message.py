@@ -2,6 +2,7 @@ import struct
 from datetime import datetime
 from typing import NamedTuple
 
+from newcell.messages.export_columns import GPS_EXPORT_COLUMNS
 
 COORDINATE_SCALING = 1e10
 MINUTE_SCALING = 1e8
@@ -17,6 +18,7 @@ HDOP_SCALING = 1e2
 VDOP_SCALING = 1e2
 TDOP_SCALING = 1e2
 AVG_CN0_SCALING = 1e2
+
 
 class GpsMessage(NamedTuple):
     date: int
@@ -35,7 +37,7 @@ class GpsMessage(NamedTuple):
     navigation_stellites: int
     tracked_satellites: int
     avg_cn0_scaled: int
-    fix_mode: int
+    pos_mode: int
 
     gps_message_struct = struct.Struct("<IiqqIHHihiHHHBBBB")
 
@@ -44,7 +46,7 @@ class GpsMessage(NamedTuple):
         return cls._make(cls.gps_message_struct.unpack(payload))
 
     def export_row(self):
-        return (self.datetime, self.latitude, self.longitude, self.speed)
+        return (getattr(self, column) for column in GPS_EXPORT_COLUMNS)
 
     @staticmethod
     def convert_nmea_to_decimal_degrees(nmea_value) -> float:

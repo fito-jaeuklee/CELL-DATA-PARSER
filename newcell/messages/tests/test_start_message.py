@@ -1,7 +1,6 @@
-from newcell.messages.start_message import StartMessage 
+from newcell.messages.start_message import StartMessage
 
-
-start_message_bytes = b'\xb9\x08LCXBA5\x03\x00\x1b\x00\xff\xff\xff\xffPolar OH1 8714ED23\x00\x00\x00\x00\x00\x00\x00\x00R\xbd\x00\x00d;\x00\x00\xe0\xbc\xc9\xb3\x8c\xc0Xq\xc2\xbf\xfcU\x1c=\x00\x00\x9b?\x00\x00\x9c?\x00\x00\x96?'
+start_message_bytes = b"\xb9\x08LCXBA5\x03\x00\x1b\x00\xff\xff\xff\xffPolar OH1 8714ED23\x00\x00\x00\x00\x00\x00\x00\x00R\xbd\x00\x00d;\x00\x00\xe0\xbc\xc9\xb3\x8c\xc0Xq\xc2\xbf\xfcU\x1c=\x00\x00\x9b?\x00\x00\x9c?\x00\x00\x96?"
 
 expected_start_message = StartMessage(
     cell_serial_number=2233,
@@ -25,6 +24,7 @@ expected_start_message = StartMessage(
     imu_cal_magz=1.171875,
 )
 
+
 class TestEndMessage:
     def test_bytes_message_parsed_correctly(self):
         # When: StartMessage.create is called on raw start message
@@ -39,7 +39,9 @@ class TestEndMessage:
 
         # Then: result tuple values matches
         assert actual_imu_accel_calibration == (
-            -0.05126953125, 0.00347900390625, -0.02734375,
+            -0.05126953125,
+            0.00347900390625,
+            -0.02734375,
         )
 
     def test_imu_gyro_calibration(self):
@@ -48,7 +50,9 @@ class TestEndMessage:
 
         # Then: result tuple values matches
         assert actual_imu_gyro_calibration == (
-            -4.396946430206299, -1.5190839767456055, 0.038167938590049744,
+            -4.396946430206299,
+            -1.5190839767456055,
+            0.038167938590049744,
         )
 
     def test_imu_magnet_calibration(self):
@@ -57,7 +61,9 @@ class TestEndMessage:
 
         # Then: result tuple values matches
         assert actual_imu_magnet_calibration == (
-            1.2109375, 1.21875, 1.171875,
+            1.2109375,
+            1.21875,
+            1.171875,
         )
 
     def test_ble_hr_id(self):

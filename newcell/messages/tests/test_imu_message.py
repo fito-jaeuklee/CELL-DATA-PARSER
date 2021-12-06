@@ -2,8 +2,9 @@ from datetime import datetime
 
 from newcell.messages.imu_message import ImuMessage
 
-
-imu_message_bytes = b'j\xdb\t\x01\xff1\x00(\xf7\x1c\xff\x95\x00\x03\xff\xf7P\x01\xfc\x00\xa4\xfe'
+imu_message_bytes = (
+    b"j\xdb\t\x01\xff1\x00(\xf7\x1c\xff\x95\x00\x03\xff\xf7P\x01\xfc\x00\xa4\xfe"
+)
 
 expected_imu_message = ImuMessage(
     time_utc=17423210,
@@ -13,10 +14,11 @@ expected_imu_message = ImuMessage(
     gyro_x=-107,
     gyro_y=3,
     gyro_z=-9,
-    mag_x=336,
-    mag_y=252,
-    mag_z=-348,
+    magnet_x=336,
+    magnet_y=252,
+    magnet_z=-348,
 )
+
 
 class TestImuMessage:
     def test_bytes_message_parsed_correctly(self):
@@ -81,4 +83,4 @@ class TestImuMessage:
         actual_exported_row = imu_message.export_row()
 
         # Then: exported row matches
-        assert actual_exported_row == expected_exported_row
+        assert tuple(actual_exported_row) == expected_exported_row

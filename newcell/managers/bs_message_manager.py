@@ -1,14 +1,9 @@
-import pandas
+import pandas as pd
 
 from newcell.managers.message_manager import MessageManager
 from newcell.messages.bs_message import BsMessage
+from newcell.messages.export_columns import BS_EXPORT_COLUMNS
 
-
-LABEL_DATETIME = 'datetime'
-LABEL_BS_OPERATION_TIME = 'operation_time'
-LABEL_BS_HR = 'hr'
-
-HEADER_BS = [LABEL_DATETIME, LABEL_BS_OPERATION_TIME, LABEL_BS_HR]
 
 @MessageManager.register
 class BsMessageManager:
@@ -18,8 +13,8 @@ class BsMessageManager:
     def add_message(self, payload: bytes) -> None:
         self.messages.append(BsMessage.create(payload).export_row())
 
-    def export_dataframe(self) -> pandas.DataFrame:
-        gps_message_dataframe = pandas.DataFrame(self.messages, columns=HEADER_BS)
+    def export_dataframe(self) -> pd.DataFrame:
+        gps_message_dataframe = pd.DataFrame(self.messages, columns=BS_EXPORT_COLUMNS)
 
         self.messages = []
 

@@ -2,9 +2,11 @@ import struct
 from datetime import datetime
 from typing import NamedTuple
 
+from newcell.messages.export_columns import BS_EXPORT_COLUMNS
 
 BATTERY_SCALING = 1e2
 CELL_TEMPERATURE_SCALING = 1e2
+
 
 class BsMessage(NamedTuple):
     date: int
@@ -24,7 +26,7 @@ class BsMessage(NamedTuple):
         return cls._make(cls.bs_message_struct.unpack(payload))
 
     def export_row(self):
-        return (self.datetime, self.operation_time, self.hr)
+        return (getattr(self, column) for column in BS_EXPORT_COLUMNS)
 
     @property
     def battery(self) -> float:

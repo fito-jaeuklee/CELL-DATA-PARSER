@@ -2,6 +2,8 @@ import struct
 from datetime import datetime
 from typing import NamedTuple
 
+from newcell.messages.export_columns import IMU_EXPORT_COLUMNS
+
 
 class ImuMessage(NamedTuple):
     time_utc: int
@@ -11,9 +13,9 @@ class ImuMessage(NamedTuple):
     gyro_x: int
     gyro_y: int
     gyro_z: int
-    mag_x: int
-    mag_y: int
-    mag_z: int
+    magnet_x: int
+    magnet_y: int
+    magnet_z: int
 
     time_utc_struct = struct.Struct("<i")
     accel_gyro_struct = struct.Struct(">hhhhhh")
@@ -25,13 +27,15 @@ class ImuMessage(NamedTuple):
     @classmethod
     def create(cls, payload: bytes):
         return cls._make(
-            cls.time_utc_struct.unpack(payload[:cls.utc_end_index]) +
-            cls.accel_gyro_struct.unpack(payload[cls.utc_end_index:cls.magnet_start_index]) +
-            cls.magnet_struct.unpack(payload[cls.magnet_start_index:])
+            cls.time_utc_struct.unpack(payload[: cls.utc_end_index])
+            + cls.accel_gyro_struct.unpack(
+                payload[cls.utc_end_index : cls.magnet_start_index]
+            )
+            + cls.magnet_struct.unpack(payload[cls.magnet_start_index :])
         )
 
     def export_row(self):
-        return (self.datetime, *self.accel, *self.gyro, *self.magnet)
+        return (getattr(self, column) for column in IMU_EXPORT_COLUMNS)
 
     @property
     def accel(self):
@@ -43,7 +47,7 @@ class ImuMessage(NamedTuple):
 
     @property
     def magnet(self):
-        return (self.mag_x, self.mag_y, self.mag_z)
+        return (self.magnet_x, self.magnet_y, self.magnet_z)
 
     @property
     def datetime(self) -> datetime:
