@@ -39,9 +39,9 @@ GPS_EXPORT_COLUMNS = (
 
 IMU_EXPORT_COLUMNS = (
     "datetime",
-    "accel_x",
-    "accel_y",
-    "accel_z",
+    "acc_x",
+    "acc_y",
+    "acc_z",
     "gyro_x",
     "gyro_y",
     "gyro_z",

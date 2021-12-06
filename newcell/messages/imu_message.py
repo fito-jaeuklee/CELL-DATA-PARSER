@@ -7,9 +7,9 @@ from newcell.messages.export_columns import IMU_EXPORT_COLUMNS
 
 class ImuMessage(NamedTuple):
     time_utc: int
-    accel_x: int
-    accel_y: int
-    accel_z: int
+    acc_x: int
+    acc_y: int
+    acc_z: int
     gyro_x: int
     gyro_y: int
     gyro_z: int
@@ -39,7 +39,7 @@ class ImuMessage(NamedTuple):
 
     @property
     def accel(self):
-        return (self.accel_x, self.accel_y, self.accel_z)
+        return (self.acc_x, self.acc_y, self.acc_z)
 
     @property
     def gyro(self):

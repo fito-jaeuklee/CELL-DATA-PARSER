@@ -8,9 +8,9 @@ imu_message_bytes = (
 
 expected_imu_message = ImuMessage(
     time_utc=17423210,
-    accel_x=-207,
-    accel_y=40,
-    accel_z=-2276,
+    acc_x=-207,
+    acc_y=40,
+    acc_z=-2276,
     gyro_x=-107,
     gyro_y=3,
     gyro_z=-9,
