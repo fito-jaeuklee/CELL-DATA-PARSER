@@ -17,7 +17,6 @@ V_VEL_SCALING = 1e3
 HDOP_SCALING = 1e2
 VDOP_SCALING = 1e2
 TDOP_SCALING = 1e2
-AVG_CN0_SCALING = 1e2
 
 
 class GpsMessage(NamedTuple):
@@ -103,7 +102,7 @@ class GpsMessage(NamedTuple):
 
     @property
     def avg_cn0(self) -> float:
-        return self.avg_cn0_scaled / AVG_CN0_SCALING
+        return self.avg_cn0_scaled
 
     @property
     def datetime(self) -> datetime:

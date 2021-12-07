@@ -153,7 +153,7 @@ class TestGpsMessage:
             datetime(2020, 2, 19, 17, 42, 32, 100000),
             37.663517666666664, 127.11675883333334,
             1.75, 136.158, 55.0, 51.0, 292.64, 0.0, 2.09,
-            2.18, 1.75, 6, 6, 0.41, 65,
+            2.18, 1.75, 6, 6, 41, 65,
         )
 
         # When: call export_row method
@@ -173,7 +173,7 @@ class TestGpsMessage:
             ("hdop", 2.09),
             ("vdop", 2.18),
             ("tdop", 1.75),
-            ("avg_cn0", 0.41),
+            ("avg_cn0", 41),
         ],
     )
     def test_scaled_value(self, message_property, expected_value):
