@@ -1,6 +1,8 @@
 import struct
 from typing import NamedTuple
 
+from newcell.messages.export_columns import START_EXPORT_COLUMNS
+
 
 class StartMessage(NamedTuple):
     cell_serial_number: int
@@ -29,6 +31,9 @@ class StartMessage(NamedTuple):
     def create(cls, payload):
         return cls._make(cls.start_message_struct.unpack(payload))
 
+    def export_row(self):
+        return (getattr(self, column) for column in START_EXPORT_COLUMNS)
+
     @property
     def device_model(self):
         decoded_product_id = self.product_id.decode("utf-8")[::-1]
@@ -41,7 +46,6 @@ class StartMessage(NamedTuple):
 
     @property
     def device_number(self):
-        # XXX: ??
         return self.cell_serial_number
 
     @property

@@ -1,0 +1,62 @@
+START_EXPORT_COLUMNS = (
+    "device_model",
+    "device_version",
+    "device_number",
+    "firmware_version",
+    "gnss_fix_time",
+    "used_nand_block_size",
+    "used_nand_page_size",
+    "ble_hr_id",
+    "imu_cal_accx",
+    "imu_cal_accy",
+    "imu_cal_accz",
+    "imu_cal_gyrx",
+    "imu_cal_gyry",
+    "imu_cal_gyrz",
+    "imu_cal_magx",
+    "imu_cal_magy",
+    "imu_cal_magz",
+)
+
+GPS_EXPORT_COLUMNS = (
+    "datetime",
+    "latitude",
+    "longitude",
+    "speed",
+    "height",
+    "h_acc",
+    "v_acc",
+    "corse_angle",
+    "vertical_velocity",
+    "hdop",
+    "vdop",
+    "tdop",
+    "navigation_stellites",
+    "tracked_satellites",
+    "avg_cn0",
+    "pos_mode",
+)
+
+IMU_EXPORT_COLUMNS = (
+    "datetime",
+    "acc_x",
+    "acc_y",
+    "acc_z",
+    "gyro_x",
+    "gyro_y",
+    "gyro_z",
+    "magnet_x",
+    "magnet_y",
+    "magnet_z",
+)
+
+BS_EXPORT_COLUMNS = (
+    "datetime",
+    "operation_time",
+    "hr",
+    "battery",
+    "cell_temperature",
+    "reserve_1",
+    "reserve_2",
+    "reserve_3",
+)

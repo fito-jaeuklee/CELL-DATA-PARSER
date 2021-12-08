@@ -1,15 +1,15 @@
 from newcell.messages.end_message import EndMessage
 
-
-end_message_bytes = b'N\xaa\x01\xbf\x01\r\x006\x00'
+end_message_bytes = b"N\xaa\x01\xbf\x01\r\x006\x00"
 
 expected_end_message = EndMessage(
-    power_off=b'N',
+    power_off=b"N",
     battery_voltage=426,
     operation_time=447,
     used_nand_block_size=13,
     used_nand_page_size=54,
 )
+
 
 class TestEndMessage:
     def test_bytes_message_parsed_correctly(self):

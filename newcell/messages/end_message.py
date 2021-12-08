@@ -17,4 +17,4 @@ class EndMessage(NamedTuple):
 
     @property
     def power_off_indication(self) -> str:
-        return self.power_off.decode('utf-8')
+        return self.power_off.decode("utf-8")
